@@ -1,0 +1,5 @@
+<meta>
+	<info type="script" name="" author="CodyL" description="Object ID Finder JStreamer V3" version="1.0.0" />
+	
+	<script type="client" src="remove.lua" />
+</meta>

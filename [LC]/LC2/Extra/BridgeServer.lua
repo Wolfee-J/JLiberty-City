@@ -6,38 +6,38 @@ GlobalPos = {}
 Bridge = {}
 Bridge['bridge_lift'] = true
 for i,v in pairs(getElementsByType('object')) do
-if Bridge[getElementID(v)] then
-setLowLODElement(v, createObject(getElementModel(v), 0, 0, 0, 0, 0, 0, true));
-local lowlod = getLowLODElement (v)
-attachElements(lowlod,v)
-Bridges[#Bridges+1] = v
-local x,y,z = getElementPosition(v)
-Original[v] = {x,y,z}
-GlobalPos = {x,y,z}
-end
+	if Bridge[getElementID(v)] then
+		setLowLODElement(v, createObject(getElementModel(v), 0, 0, 0, 0, 0, 0, true));
+		local lowlod = getLowLODElement (v)
+		attachElements(lowlod,v)
+		Bridges[#Bridges+1] = v
+		local x,y,z = getElementPosition(v)
+		Original[v] = {x,y,z}
+		GlobalPos = {x,y,z}
+	end
 end
 
 function moveBridgeBack(V)
-local x,y,z = unpack(Original[v] or GlobalPos)
-moveObject ( V, 5000, x,y,z ) 
-setTimer ( removeThem, 6000, 1)
+	local x,y,z = unpack(Original[v] or GlobalPos)
+	moveObject ( V, 5000, x,y,z )
+	setTimer ( removeThem, 6000, 1)
 end
 
 function removeThem()
-triggerClientEvent ( root, "removeThem",root )
+	triggerClientEvent ( root, "removeThem",root )
 end
 
 function moveBridge()
-for i,v in pairs(Bridges) do
-local x,y,z = unpack(Original[v] or GlobalPos)
-moveObject ( v, 5000, x,y,z+50 ) 
-setTimer ( moveBridgeBack, 20000, 1,v)
-end
+	for i,v in pairs(Bridges) do
+		local x,y,z = unpack(Original[v] or GlobalPos)
+		moveObject ( v, 5000, x,y,z+50 )
+		setTimer ( moveBridgeBack, 20000, 1,v)
+	end
 end
 
 function moveBridgeA()
-triggerClientEvent ( root, "createThem",root )
-setTimer ( moveBridge, 1000, 1)
+	triggerClientEvent ( root, "createThem",root )
+	setTimer ( moveBridge, 1000, 1)
 end
 
 setTimer ( moveBridgeA, 1000,1)

@@ -431,12 +431,12 @@ Tracks[2] = {
 local offx,offy,offz = -335,0,5
 
 for i,v in pairs(Tracks[1]) do
-local x,y,z,s = unpack(v)
-Tracks[1][i] = {x+offx,y+offy,z+offz,s}
+	local x,y,z,s = unpack(v)
+	Tracks[1][i] = {x+offx,y+offy,z+offz,s}
 end
 
 for i,v in pairs(Tracks[2]) do
-local x,y,z,s = unpack(v)
-Tracks[2][i] = {x+offx,y+offy,z+offz,s}
+	local x,y,z,s = unpack(v)
+	Tracks[2][i] = {x+offx,y+offy,z+offz,s}
 end
 

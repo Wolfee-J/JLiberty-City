@@ -5,11 +5,11 @@ Count = 4 -- How long are the trains?
 function Run()
 	for iA,vA in pairs(Tracks) do
 		Trains[iA] = {}
-		Trains[iA]['Power'] = 150 -- Default Speed
+		Trains[iA]['Power'] = 200 -- Default Speed
 		Trains[iA]['Trains'] = {} -- Trains Table
 		Trains[iA]['Doors'] = {} -- Doors Table
 		Trains[iA]['Timer'] = {} -- Timers
-		Trains[iA]['Track'] = {} -- Timers
+		Trains[iA]['Track'] = {} 
 		for i,v in pairs(vA) do
 			if v[4] == 1 then
 				local blip = createBlip(v[1],v[2],v[3],33) -- Mark Stations
@@ -17,6 +17,7 @@ function Run()
 		end
 		CreateCarts(iA)
 	end
+	setTimer ( updateClient, 1000, 0)
 end
 
 
@@ -29,11 +30,16 @@ end
 addCommandHandler("Speed",Speedtest) -- Stynax , /Speed Train# Speed
 
 
-
 function CreateCarts(TrackNumber)
 	for i=1,Count do
-		local x,y,z = unpack(Tracks[TrackNumber][i])
-		Trains[TrackNumber]['Trains'][i] = exports.Objs:JcreateObject('tram',x,y,z,0,0,0) -- Create cart at track subset.
+		if Trains[TrackNumber]['Trains'][i-1]  then
+			local x,y,z = getElementOffset(Trains[TrackNumber]['Trains'][i-1],0,22,0)
+			Trains[TrackNumber]['Trains'][i] = exports.Objs:JcreateObject('tram',x,y,z,0,0,0) -- Create cart at track subset.
+		else
+			local x,y,z = unpack(Tracks[TrackNumber][1])
+			Trains[TrackNumber]['Trains'][i] = exports.Objs:JcreateObject('tram',x,y,z,0,0,0) -- Create cart at track subset.
+		end
+		
 		Trains[TrackNumber]['Doors'][i] = {}
 		Trains[TrackNumber]['Doors'][i][1] = exports.Objs:JcreateObject('tramd',x,y,z,0,0,0) -- Create Door #1
 		Trains[TrackNumber]['Doors'][i][2] = exports.Objs:JcreateObject('tramd',x,y,z,0,0,0) -- Create Door #2
@@ -42,18 +48,8 @@ function CreateCarts(TrackNumber)
 		attachElements(Trains[TrackNumber]['Doors'][i][1],Cart,0,0,0)	-- Attach Door #1
 		attachElements(Trains[TrackNumber]['Doors'][i][2],Cart,0,0.8,0)	-- Attach Door #2
 		createBlipAttachedTo(Cart,56) -- Attach Blip to cart
-		setElementDoubleSided(Cart,true)
-		timer(Cart,i)
-	end
-end
-
-function Fix(RotationA,RotationB)
-	local fix = RotationA-RotationB
-	if RotationA > 300 or RotationB > 300 then
-		local fix = fix-360
-		return fix
-	else
-		return fix
+		
+		setTimer(timer,500,1,Cart,i)
 	end
 end
 
@@ -70,11 +66,25 @@ function Fix(RotationA,RotationB)
 	end
 end
 
-
+function updateClient()
+	for i = 1,#Tracks do
+		for ia = 2,Count do
+			local cart = Trains[i]['Trains'][(ia)]
+			local lead = Trains[i]['Trains'][(ia-1)]
+			if isElement(cart) and isElement(lead) then
+				triggerClientEvent ( root, "trainRotation", root,cart,lead )
+				triggerClientEvent ( root, "prepLods", root, lead,Trains[i]['Doors'][ia][1],Trains[i]['Doors'][ia][2] )
+				triggerClientEvent ( root, "prepLods", root, cart,Trains[i]['Doors'][ia][1],Trains[i]['Doors'][ia][2] )
+			else
+				print(i,ia)
+			end
+		end
+	end
+end
 
 function timer(Cart,CartID)
 	local Track = unpack(Assigned[Cart])
-
+	
 	local Speed = Trains[Track]['Power']
 
 	getTrack(Cart) -- Define the carts track
@@ -85,19 +95,27 @@ function timer(Cart,CartID)
 	local CartX,CartY,CartZ = getElementPosition(Cart)
 	local TrackX,TrackY,TrackZ = TheTrack[1],TheTrack[2],TheTrack[3]
 	local Distance = getDistanceBetweenPoints3D (CartX,CartY,CartZ,TrackX,TrackY,TrackZ) -- Grab Distance
-	local xr,yr,zr = getElementRotation(Cart)
-	local Xr,Yr,Zr = GetRotation2 (CartX,CartY,CartZ,TrackX,TrackY,TrackZ) -- Grab Rotation
-	local Xr = -Fix(xr,Xr)
-	local Yr = -Fix(yr,Yr)
-	local Zr = -Fix(zr,Zr)
 
-
-	local PreviousTrain = Trains[Track]['Trains'][CartID+1]
-	local CartDistance = -getDistance(Cart,PreviousTrain)*10
-
-	local CartSpeed = math.max((Distance*(Speed/1.5))+CartDistance,55) -- Ensures that it doesn't go below 50
-
-	moveObject (Cart,CartSpeed,TheTrack[1],TheTrack[2],TheTrack[3], Xr,Yr,Zr)
+	local PreviousTrain = Trains[Track]['Trains'][CartID-1]
+	if PreviousTrain then
+		CartDistance = getDistance(Cart,PreviousTrain)*25
+	else
+		CartDistance = 0
+	end
+	
+	local CartSpeed = math.max((Distance*Speed)+CartDistance,50) -- Ensures that it doesn't go below 50
+	
+	if (CartID > 1) then
+		moveObject (Cart,CartSpeed,TheTrack[1],TheTrack[2],TheTrack[3])
+	else
+		local xr,yr,zr = getElementRotation(Cart)
+		local Xr,Yr,Zr = GetRotation2 (CartX,CartY,CartZ,TrackX,TrackY,TrackZ) -- Grab Rotation
+		local Xr = -Fix(xr,Xr)
+		local Yr = -Fix(yr,Yr)
+		local Zr = -Fix(zr,Zr)
+		moveObject (Cart,CartSpeed,TheTrack[1],TheTrack[2],TheTrack[3],Xr,Yr,Zr)
+	end
+	
 	Trains[Track]['Timer'][CartID] = setTimer (timer,CartSpeed-5, 1,Cart,CartID)
 
 	if TheTrack[4] == 1 and CartID == 1 then -- If it's a station, and this is the 3rd cart stop the train
@@ -131,4 +149,3 @@ end
 addCommandHandler ( "getTrainStation", getClosestTrain )
 
 Run ()
-

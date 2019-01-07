@@ -10,6 +10,8 @@
 	<script src="Extra/BridgeClient.lua" type="client" />
 	<script src="Extra/BridgeServer.lua" type="server" />
 	
+ 	<script src="Extra/Train Client.lua" type="client" />
+ 
  	<script src="Extra/Tracks.lua" type="server" />
 	<script src="Extra/Helpers.lua" type="server" />
  	<script src="Extra/Train.lua" type="server" />

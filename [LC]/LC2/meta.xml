@@ -1,10 +1,6 @@
 <meta>
-	<info type="script" name="JStreamer" author="JDev(CodyJ)" description="JDev Streamer V2 (8 was 0.8)" version="2" />
-	<file src="gta3.JSD" />
- 
-	<script src="Loaders/JSDLoader.lua" type="client" />
-	<script src="Loaders/JSPLoader.lua" type="server" />
- 
+	<info type="script" name="Gta Liberty City Map" author="CodyJ(Wolfe)" description="MTA-Stream Liberty City" version="3" Streamer="1" />
+
 	<script src="Settings/CWaterData.lua" type="client" />
 	
 	<script src="Extra/BridgeClient.lua" type="client" />

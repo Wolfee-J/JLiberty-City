@@ -149,7 +149,7 @@ ind_land108,ind_land108,gtaiii,ind_land108,120,nil,nil,true
 pathpoints15,pathpoints15,indust1,pathpoints15,100,nil,nil,nil
 newairportwall3,newairportwall3,airgrndb,newairportwall3,290,nil,nil,nil
 callbrd_01,callbrd_01,inddbridge,callbrd_01,300,nil,nil,true
-Hospital_Sub,Hospital_Sub,subhospital,Hospital_Sub,200,true,nil,true
+Hospital_Sub,Hospital_Sub,subhospital,Hospital_Sub,200,nil,nil,true
 ind_land055,ind_land055,gtaiii,ind_land055,100,nil,nil,true
 treencom2,treencom2,trees2,treencom2,200,nil,nil,true
 RD_PNE01,RD_PNE01,gtaiii,RD_PNE01,220,nil,nil,true
@@ -225,7 +225,7 @@ RD_CBTM14,RD_CBTM14,gtaiii,RD_CBTM14,200,nil,nil,true
 RD_PSW12,RD_PSW12,gtaiii,RD_PSW12,220,nil,nil,true
 ind_customroad116,ind_customroad116,gtaiii,ind_customroad116,300,nil,nil,nil
 Hotel_Tenemant1,Hotel_Tenemant1,tenblock6a,Hotel_Tenemant1,150,nil,nil,true
-underground_over5,underground_over5,comtunnels,underground_over5,120,true,nil,true
+underground_over5,underground_over5,comtunnels,underground_over5,120,nil,nil,true
 com_land023,com_land023,colcomp4b,com_land023,110,nil,nil,true
 mob_detailsb,mob_detailsb,hot_mobint,mob_detailsb,299,nil,nil,nil
 Building1,Building1,cutbuild1,Building1,299,nil,nil,nil

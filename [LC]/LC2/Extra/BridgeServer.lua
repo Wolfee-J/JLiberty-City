@@ -5,15 +5,22 @@ GlobalPos = {}
 
 Bridge = {}
 Bridge['bridge_lift'] = true
-for i,v in pairs(getElementsByType('object')) do
-	if Bridge[getElementID(v)] then
-		setLowLODElement(v, createObject(getElementModel(v), 0, 0, 0, 0, 0, 0, true));
-		local lowlod = getLowLODElement (v)
-		attachElements(lowlod,v)
-		Bridges[#Bridges+1] = v
-		local x,y,z = getElementPosition(v)
-		Original[v] = {x,y,z}
-		GlobalPos = {x,y,z}
+
+function getID(element)
+	return getElementData(element,'id')
+end
+
+function runBridge()
+	for i,v in pairs(getElementsByType('object')) do
+		if Bridge[getID(v)] then
+			setLowLODElement(v, createObject(getElementModel(v), 0, 0, 0, 0, 0, 0, true));
+			local lowlod = getLowLODElement (v)
+			attachElements(lowlod,v)
+			Bridges[#Bridges+1] = v
+			local x,y,z = getElementPosition(v)
+			Original[v] = {x,y,z}
+			GlobalPos = {x,y,z}
+		end
 	end
 end
 
@@ -43,3 +50,4 @@ end
 setTimer ( moveBridgeA, 1000,1)
 setTimer ( moveBridgeA, 300000, 0)
 
+setTimer ( runBridge, 15000, 1)
